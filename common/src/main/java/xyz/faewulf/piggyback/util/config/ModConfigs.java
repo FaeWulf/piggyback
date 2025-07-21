@@ -1,8 +1,8 @@
 package xyz.faewulf.piggyback.util.config;
 
-import xyz.faewulf.piggyback.Constants;
 import xyz.faewulf.lib.util.config.Entry;
 import xyz.faewulf.lib.util.config.ModConfig;
+import xyz.faewulf.piggyback.Constants;
 
 @ModConfig(mod_id = Constants.MOD_ID)
 public class ModConfigs {
@@ -15,6 +15,9 @@ public class ModConfigs {
 
     @Entry(category = "general", name = "Weighted Carrying", group = "Server side")
     public static boolean slow_carry = false;
+
+    @Entry(category = "general", name = "Carrying Causes Hunger", group = "Server side")
+    public static boolean hunger_carry = false;
 
     @Entry(category = "general", name = "Dismount on falling", group = "Server side")
     public static boolean falling_dismount = false;

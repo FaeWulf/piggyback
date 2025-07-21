@@ -15,6 +15,7 @@
   "piggyback.config.disable_ride_function.tooltip": "- Disable the ability right-click a crouching player with an empty hand to hop on their back.",
   "piggyback.config.hide_rider.tooltip": "- Hide rider's player model in 1st person view.",
   "piggyback.config.slow_carry.tooltip": "- Carrier got a slow debuff while carrying other player.",
+  "piggyback.config.hunger_carry.tooltip": "- Carrier got hunger while carrying other player.\n- Loses 1 saturation pointer per 40 seconds.",
   "piggyback.config.falling_dismount.tooltip": "- Dismount on falling from high place.\n- Can be avoided by crouching.",
   "piggyback.config.category.general": "General",
   "piggyback.config.category.compatibility": "Compatibility",

@@ -27,24 +27,23 @@ public abstract class ServerPlayerMixin extends Player {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickInjectApplySlow(CallbackInfo ci) {
-
-        if(!ModConfigs.slow_carry)
-            return;
-
-        if(!this.getPassengers().isEmpty())  {
+        if (!this.getPassengers().isEmpty() && ModConfigs.slow_carry) {
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 3, 0, false, false));
+        }
+
+        if (!this.getPassengers().isEmpty() && ModConfigs.hunger_carry) {
+            this.causeFoodExhaustion(0.005F);
         }
     }
 
     // For realistic piggyback mechanic
     @Inject(method = "tick", at = @At("TAIL"))
-    private void tickInjectRemovePassengerOnInterruption(CallbackInfo callbackInfo)
-    {
-        if(!ModConfigs.falling_dismount)
+    private void tickInjectRemovePassengerOnInterruption(CallbackInfo callbackInfo) {
+        if (!ModConfigs.falling_dismount)
             return;
 
-        if(this.isVehicle() && !this.isCrouching() && !this.isFallFlying() && this.fallDistance > 2F)
-            if(this.getFirstPassenger() != null)
+        if (this.isVehicle() && !this.isCrouching() && !this.isFallFlying() && this.fallDistance > 2F)
+            if (this.getFirstPassenger() != null)
                 this.getFirstPassenger().stopRiding();
     }
 
@@ -58,7 +57,7 @@ public abstract class ServerPlayerMixin extends Player {
             lastPassenger = playerEntity;
         }
 
-        if(lastPassenger != null) {
+        if (lastPassenger != null) {
             return lastPassenger;
         }
 
@@ -68,7 +67,7 @@ public abstract class ServerPlayerMixin extends Player {
     // Send sync packet to prevent client desync from riding multiple players.
     @Inject(method = "startRiding", at = @At("RETURN"))
     private void startRidingInjectSyncPacket(Entity entity, boolean force, CallbackInfoReturnable<Boolean> cir) {
-        if(entity instanceof ServerPlayer playerEntity && cir.getReturnValue()) {
+        if (entity instanceof ServerPlayer playerEntity && cir.getReturnValue()) {
             playerEntity.connection.send(new ClientboundSetPassengersPacket(playerEntity));
         }
     }
