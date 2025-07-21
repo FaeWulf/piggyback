@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "xyz.faewulf.piggyback.mixin",
-  "compatibilityLevel": "JAVA_18",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [],
   "server": [],

@@ -17,13 +17,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin  implements Nameable, EntityAccess, CommandSource {
+public abstract class EntityMixin implements Nameable, EntityAccess, CommandSource {
 
-    @Shadow public abstract boolean hasPassenger(Entity passenger);
+    @Shadow
+    private EntityDimensions dimensions;
+    @Shadow
+    private Level level;
 
-    @Shadow private EntityDimensions dimensions;
-
-    @Shadow private Level level;
+    @Shadow
+    public abstract boolean hasPassenger(Entity passenger);
 
     @Inject(method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V", at = @At("TAIL"))
     private void updatePassengerPositionInject(Entity passenger, Entity.MoveFunction positionUpdater, CallbackInfo ci) {
@@ -32,7 +34,7 @@ public abstract class EntityMixin  implements Nameable, EntityAccess, CommandSou
             float f = Mth.sin(player.yBodyRot * 0.017453292F);
             float g = Mth.cos(player.yBodyRot * 0.017453292F);
 
-            float height = (float) (this.dimensions.height * 0.2f);
+            float height = (float) (this.dimensions.height() * 0.2f);
 
             // Change passenger yaw based on vehicle's yaw
             // Head yaw will be clamped to prevent 360* heads rotate, since it very... disturbing
@@ -49,11 +51,10 @@ public abstract class EntityMixin  implements Nameable, EntityAccess, CommandSou
 
     // Prevent client desync
     @Inject(method = "removePassenger", at = @At("TAIL"))
-    private void onRemovePassenger(Entity passenger, CallbackInfo callbackInfo)
-    {
+    private void onRemovePassenger(Entity passenger, CallbackInfo callbackInfo) {
         Entity entity = (Entity) (Object) this;
 
-        if(!this.level.isClientSide && entity instanceof ServerPlayer serverPlayer)
+        if (!this.level.isClientSide && entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.send(new ClientboundSetPassengersPacket(entity));
     }
 }

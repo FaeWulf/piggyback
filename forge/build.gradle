@@ -1,90 +1,130 @@
 plugins {
     id 'multiloader-loader'
-    id 'net.neoforged.moddev.legacyforge'
+    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
 
-repositories {
-    maven {
-        url = "https://api.modrinth.com/maven"
-    }
-    maven {
-        url = "https://jm.gserv.me/repository/maven-public/"
-    }
-    maven {
-        name = "Curios"
-        url = uri("https://maven.theillusivec4.top/")
-    }
+base {
+    archivesName = "${mod_name}-forge-${minecraft_version}"
 }
 
 mixin {
-    add(sourceSets.main, "${mod_id}.refmap.json")
-
     config("${mod_id}.mixins.json")
     config("${mod_id}.forge.mixins.json")
-    config("${mod_id}.client.mixins.json")
-    config("${mod_id}.compat.mixins.json")
 }
 
-legacyForge {
-    version = "${minecraft_version}-${forge_version}"
+jar {
+    manifest {
+        attributes["MixinConfigs"] = "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+    }
+}
 
-    validateAccessTransformers = false
+jarJar.enable()
 
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+
+    copyIdeResources = true //Calls processResources when in dev
+
+    reobf = false // Forge 1.20.6+ uses official mappings at runtime, so we shouldn't reobf from official to SRG
+
+    // Automatically enable forge AccessTransformers if the file exists
+    // This location is hardcoded in Forge and can not be changed.
+    // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
+    // Forge still uses SRG names during compile time, so we cannot use the common AT's
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
-        accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
+        accessTransformer = at
     }
 
     runs {
         client {
-            client()
+            workingDirectory file('runs/client')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Client'
+            mods {
+                modClientRun {
+                    source sourceSets.main
+                }
+            }
         }
-        data {
-            data()
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-        }
+
         server {
-            server()
+            workingDirectory file('runs/server')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Server'
+            mods {
+                modServerRun {
+                    source sourceSets.main
+                }
+            }
         }
-    }
 
-    mods {
-        "${mod_id}" {
-            sourceSet sourceSets.main
+        data {
+            workingDirectory file('runs/data')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            taskName 'Data'
+            mods {
+                modDataRun {
+                    source sourceSets.main
+                }
+            }
         }
-    }
-
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
     }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    compileOnly project(":common")
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
-    implementation 'org.jetbrains:annotations:24.0.1'
 
-    // MixinExtras
-    testCompileOnly(compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1")))
-    jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.4.1")) {
-        version {
-            strictly '[0.4.1,)'
-        }
+    // Forge's hack fix
+    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+
+    // Mixin extra
+    //compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
+    compileOnly("io.github.llamalad7:mixinextras-common:0.4.1")
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
+        jarJar.ranged(it, "[0.4.1,)")
     }
 
     //lib
     implementation("com.electronwill.night-config:toml:3.6.0")
-    modImplementation "maven.modrinth:faewulfslib:${faewulfs_lib_version}-forge,${minecraft_version}"
+    implementation "maven.modrinth:faewulfslib:${faewulfs_lib_version}-forge,${minecraft_version}"
 }
 
-jar {
-    finalizedBy('reobfJar')
-    manifest.attributes([
-            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
-    ])
+tasks.named("jar", Jar) {
+    archiveClassifier.set('orphaned')
 }
 
-tasks.withType(Javadoc).configureEach { enabled = false }
+tasks.named("sourcesJar").configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE // Ignore duplicate files
+}
+
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE // Ignore duplicate files
+
+    filesMatching("META-INF/accesstransformer.cfg") {
+        if (project.name.contains("forge") && !project.name.contains("neoforge")) {
+            exclude("META-INF/accesstransformer.cfg") // Prevent common AT from being added
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            fg.component(it)
+        }
+    }
+}
+
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
+}

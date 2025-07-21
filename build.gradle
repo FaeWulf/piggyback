@@ -2,7 +2,7 @@ plugins {
     // see https://fabricmc.net/develop/ for new versions
     id 'fabric-loom' version "${loom_version}" apply false
     // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
-    id 'net.neoforged.moddev.legacyforge' version "${mdg_version}" apply false
+    id 'net.neoforged.moddev' version "${mdg_version}" apply false
 
     //publisher
     id "com.hypherionmc.modutils.modpublisher" version "2.1.6" apply false
@@ -12,7 +12,7 @@ plugins {
 def additionalVariants = [] // Add more as needed
 
 // Define base projects
-def baseProjects = ["fabric", "forge"]
+def baseProjects = ["fabric", "neoforge", "forge"]
 
 // Generate all project names dynamically
 def allProjects = baseProjects + additionalVariants.collectMany { variant ->
@@ -82,7 +82,7 @@ subprojects { subproject ->
                 curseforge System.getenv("CURSEFORGE_TOKEN")
             }
 
-            setGameVersions(minecraft_version)
+            setGameVersions(minecraft_version, "1.21")
             setVersion(project.version)
             setVersionType(version_type)
 
@@ -112,7 +112,7 @@ subprojects { subproject ->
                     }
                     break
                 case "forge":
-                    setLoaders("Forge", "NeoForge")
+                    setLoaders("Forge")
                     setDisplayName("[Forge ${minecraft_version}] ${artifactName} v${project.version}")
                     modrinthDepends {
                         required "faewulfslib"
