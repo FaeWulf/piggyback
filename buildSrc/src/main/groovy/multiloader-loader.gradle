@@ -12,24 +12,13 @@ configurations {
 }
 
 dependencies {
-    //better bundle
-//    if (project.name.contains("better-bundle")) {
-//        compileOnly(project(':common-better-bundle')) {
-//            capabilities {
-//                requireCapability "$group:$mod_id_better_bundle"
-//            }
-//        }
-//        commonJava project(path: ':common-better-bundle', configuration: 'commonJava')
-//        commonResources project(path: ':common-better-bundle', configuration: 'commonResources')
-//    } else {
-        compileOnly(project(':common')) {
-            capabilities {
-                requireCapability "$group:$mod_id"
-            }
+    compileOnly(project(':common')) {
+        capabilities {
+            requireCapability "$group:$mod_id"
         }
-        commonJava project(path: ':common', configuration: 'commonJava')
-        commonResources project(path: ':common', configuration: 'commonResources')
-//    }
+    }
+    commonJava project(path: ':common', configuration: 'commonJava')
+    commonResources project(path: ':common', configuration: 'commonResources')
 }
 
 tasks.named('compileJava', JavaCompile) {
@@ -53,3 +42,15 @@ tasks.named('sourcesJar', Jar) {
     dependsOn(configurations.commonResources)
     from(configurations.commonResources)
 }
+
+//tasks.named('jar', Jar).configure {
+//    dependsOn(configurations.commonJava)
+//    from {
+//        configurations.commonJava.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//
+//    dependsOn(configurations.commonResources)
+//    from {
+//        configurations.commonResources.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//}

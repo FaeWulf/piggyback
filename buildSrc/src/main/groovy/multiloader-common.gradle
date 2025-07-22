@@ -4,12 +4,7 @@ plugins {
 }
 
 base {
-//    if (project.name.contains("better-bundle")) {
-//        archivesName = "${mod_id_better_bundle}-${project.name.replaceAll("-better-bundle", "")}-${minecraft_version}"
-//    }
-//    else {
     archivesName = "${mod_id}-${project.name}-${minecraft_version}"
-//    }
 }
 
 java {
@@ -70,14 +65,8 @@ repositories {
         capability("$group:${project.name}:$version")
         capability("$group:${base.archivesName.get()}:$version")
 
-//        if (project.name.contains("better-bundle")) {
-//            capability("$group:$mod_id_better_bundle-${project.name}-${minecraft_version}:$version")
-//            capability("$group:$mod_id_better_bundle:$version")
-//        }
-//        else {
         capability("$group:$mod_id-${project.name}-${minecraft_version}:$version")
         capability("$group:$mod_id:$version")
-//        }
 
     }
     publishing.publications.configureEach {
@@ -97,12 +86,7 @@ jar {
         rename { "${it}_${mod_name}" }
     }
 
-//    if (project.name.contains("better-bundle")) {
-//        from(rootProject.file("CHANGELOG_BETTER_BUNDLE.md"))
-//    }
-//    else {
     from(rootProject.file("CHANGELOG.md"))
-//    }
 
     from(rootProject.file("CHANGELOG_FULL.md"))
 
@@ -128,12 +112,7 @@ if (project.name.contains("forge") && !project.name.contains("neoforge")) {
                 rename { "${it}_${mod_name}" }
             }
 
-//            if (project.name.contains("better-bundle")) {
-//                from(rootProject.file("CHANGELOG_BETTER_BUNDLE.md"))
-//            } else {
             from(rootProject.file("CHANGELOG.md"))
-//            }
-
             from(rootProject.file("CHANGELOG_FULL.md"))
         }
     }
@@ -162,13 +141,6 @@ processResources {
             'faewulfs_lib_version'         : faewulfs_lib_version
     ]
 
-    //better bundle
-//    if (project.name.contains("better-bundle")) {
-//        expandProps.put('mod_name', mod_name_better_bundle)
-//        expandProps.put('mod_id', mod_id_better_bundle)
-//        expandProps.put('description', description_better_bundle)
-//    }
-
     filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
         expand expandProps
     }
@@ -178,13 +150,13 @@ processResources {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifactId base.archivesName.get()
+            artifactId = base.archivesName.get()
             from components.java
         }
     }
     repositories {
         maven {
-            url System.getenv('local_maven_url')
+            url = System.getenv('local_maven_url')
         }
     }
 }

@@ -42,7 +42,7 @@ pluginManagement {
         }
 
         maven {
-            url "https://maven.firstdark.dev/releases"
+            url = "https://maven.firstdark.dev/releases"
         }
 
 

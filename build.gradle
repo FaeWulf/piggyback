@@ -73,9 +73,6 @@ subprojects { subproject ->
 
     subproject.afterEvaluate {
 
-        // Sub project check
-        def isBetterBundle = subproject.name.contains("better-bundle")
-
         publisher {
             apiKeys {
                 modrinth System.getenv("MODRINTH_TOKEN")
