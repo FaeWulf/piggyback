@@ -25,8 +25,7 @@ public class performRiding {
                 && hitResult == null
         ) {
             if (!level.isClientSide) {
-                player.startRiding(entity, false);
-
+                player.startRiding(entity, true);
                 return InteractionResult.SUCCESS;
             }
         }
