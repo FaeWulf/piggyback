@@ -16,7 +16,7 @@ mixin {
 
 jar {
     manifest {
-        attributes["MixinConfigs"] = "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+        attributes["MixinConfigs"] = "${mod_id}.mixins.json,${mod_id}.forge.mixins.json,${mod_id}.client.mixins.json,${mod_id}.compat.mixins.json"
     }
 }
 
