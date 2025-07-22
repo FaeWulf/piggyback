@@ -8,8 +8,6 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "client": [
-    "PlayerRendererMixin"
-  ],
+  "client": ["LivingEntityRendererMixin", "PlayerRendererMixin", "PlayerRenderStateMixin"],
   "plugin": "xyz.faewulf.lib.util.mixinPlugin.ConditionalMixinPlugin"
 }
