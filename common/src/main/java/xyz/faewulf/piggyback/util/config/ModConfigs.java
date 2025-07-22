@@ -12,11 +12,11 @@ public class ModConfigs {
     public static boolean disable_ride_function = false;
 
     @SliderEntry(min = 0, max = 100)
-    @Entry(category = "general", name = "Translucent carrier in 1st person view", group = "Client side")
+    @Entry(category = "general", name = "Translucent carrier in 1st person view", group = "Client side", info = "0 to disable render player model")
     public static int effect_translucent_carrier = 100;
 
     @SliderEntry(min = 0, max = 100)
-    @Entry(category = "general", name = "Translucent rider in 1st person view", group = "Client side")
+    @Entry(category = "general", name = "Translucent rider in 1st person view", group = "Client side", info = "0 to disable render player model")
     public static int effect_translucent = 100;
 
     @Entry(category = "general", name = "Weighted Carrying", group = "Server side")
