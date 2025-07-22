@@ -34,7 +34,7 @@ public abstract class ServerPlayerMixin extends Player {
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickInjectApplySlow(CallbackInfo ci) {
         if (!this.getPassengers().isEmpty() && ModConfigs.slow_carry) {
-            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 3, 0, false, false));
+            this.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 3, 0, false, false));
         }
 
         if (!this.getPassengers().isEmpty() && ModConfigs.hunger_carry) {
