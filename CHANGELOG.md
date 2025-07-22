@@ -6,7 +6,8 @@ Or alternatively, visit [mod's github](https://github.com/FaeWulf/piggyback/blob
 ### Added
 
 - Ported the mod to 1.21.1, 1.21.3-1.21.8
-- Hunger effect option.
+- Hunger effect option, carrier lose 1 hunger point per 40 seconds.
+- Option to hide/make rider (and carrier) transparent in 1st person view.
 
 ### Changed
 
