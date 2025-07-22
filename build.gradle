@@ -82,7 +82,7 @@ subprojects { subproject ->
                 curseforge System.getenv("CURSEFORGE_TOKEN")
             }
 
-            setGameVersions(minecraft_version, "1.21")
+            setGameVersions(minecraft_version)
             setVersion(project.version)
             setVersionType(version_type)
 
