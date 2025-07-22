@@ -10,8 +10,13 @@ public class ModConfigs {
     @Entry(category = "general", name = "Disable ability to ride", group = "Server side")
     public static boolean disable_ride_function = false;
 
-    @Entry(category = "general", name = "Hide rider in 1st person", group = "Client side")
-    public static boolean hide_rider = false;
+    @SliderEntry(min = 0, max = 100)
+    @Entry(category = "general", name = "Translucent carrier in 1st person view", group = "Client side", info = "0 to disable render player model")
+    public static int effect_translucent_carrier = 100;
+
+    @SliderEntry(min = 0, max = 100)
+    @Entry(category = "general", name = "Translucent rider in 1st person view", group = "Client side", info = "0 to disable render player model")
+    public static int effect_translucent = 100;
 
     @Entry(category = "general", name = "Weighted Carrying", group = "Server side")
     public static boolean slow_carry = false;
