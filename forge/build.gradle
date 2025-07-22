@@ -104,6 +104,10 @@ tasks.named("sourcesJar").configure {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE // Ignore duplicate files
 }
 
+// Force jarJar run when build, why forge?
+tasks.named("build").configure {
+    dependsOn tasks.named("jarJar")
+}
 
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE // Ignore duplicate files
