@@ -3,11 +3,10 @@
   "package": "xyz.faewulf.piggyback.mixinClient",
   "compatibilityLevel": "JAVA_18",
   "refmap": "${mod_id}.refmap.json",
-  "mixins": [
-  ],
+  "mixins": [],
+  "client": ["LivingEntityRendererMixin", "PlayerRendererMixin"],
   "injectors": {
     "defaultRequire": 1
   },
-  "client": ["LivingEntityRendererMixin", "PlayerRendererMixin", "PlayerRenderStateMixin"],
   "plugin": "xyz.faewulf.lib.util.mixinPlugin.ConditionalMixinPlugin"
 }
