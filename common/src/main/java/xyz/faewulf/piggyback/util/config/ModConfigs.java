@@ -2,6 +2,7 @@ package xyz.faewulf.piggyback.util.config;
 
 import xyz.faewulf.lib.util.config.Entry;
 import xyz.faewulf.lib.util.config.ModConfig;
+import xyz.faewulf.lib.util.config.SliderEntry;
 import xyz.faewulf.piggyback.Constants;
 
 @ModConfig(mod_id = Constants.MOD_ID)
