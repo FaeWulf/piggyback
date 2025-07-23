@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -20,6 +21,8 @@ import xyz.faewulf.piggyback.util.config.ModConfigs;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
+
+    @Shadow public abstract void stopRiding();
 
     public ServerPlayerMixin(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
@@ -36,6 +39,13 @@ public abstract class ServerPlayerMixin extends Player {
             this.causeFoodExhaustion(0.005F);
         }
     }
+
+    @Inject(method = "disconnect", at = @At("HEAD"))
+    private void disconnectInject(CallbackInfo ci) {
+        if(this.isPassenger()) {
+            if (this.getVehicle() instanceof Player)
+                this.stopRiding();
+        }
     }
 
     // For realistic piggyback mechanic

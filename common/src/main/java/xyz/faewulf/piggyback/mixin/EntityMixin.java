@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityAccess;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,6 +25,9 @@ public abstract class EntityMixin  implements Nameable, EntityAccess, CommandSou
     @Shadow private EntityDimensions dimensions;
 
     @Shadow private Level level;
+
+    @Shadow @Nullable
+    public abstract Entity getVehicle();
 
     @Inject(method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V", at = @At("TAIL"))
     private void updatePassengerPositionInject(Entity passenger, Entity.MoveFunction positionUpdater, CallbackInfo ci) {
@@ -55,5 +59,18 @@ public abstract class EntityMixin  implements Nameable, EntityAccess, CommandSou
 
         if(!this.level.isClientSide && entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.send(new ClientboundSetPassengersPacket(entity));
+    }
+
+    // Inject at the head of unRide to prevent vehicle from being saved with the player
+    @Inject(method = "unRide", at = @At("HEAD"))
+    private void onUnRide(CallbackInfo ci) {
+
+        if(this.level.isClientSide)
+            return;
+
+        Entity vehicle = this.getVehicle();
+        if (vehicle instanceof Player) {
+            ((ServerPlayer)(Object)this).stopRiding();
+        }
     }
 }
