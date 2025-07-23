@@ -2,7 +2,7 @@ package xyz.faewulf.piggyback.event_handler;
 
 import net.minecraft.world.InteractionResult;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.faewulf.piggyback.Constants;
 
@@ -12,7 +12,8 @@ public class performRiding {
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         InteractionResult interactionResult = xyz.faewulf.piggyback.event.performRiding.run(event.getLevel(), event.getEntity(), event.getHand(), event.getTarget(), null);
 
-        if (interactionResult.consumesAction())
-            event.setCanceled(true);
+        if (interactionResult.consumesAction()) {
+            event.setCancellationResult(InteractionResult.CONSUME);
+        }
     }
 }
