@@ -22,23 +22,31 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         super(context, model, shadowRadius);
     }
 
-    @Inject(method = "setModelProperties", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;getArmPose(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;", ordinal = 1))
+    @Inject(method = "setModelProperties", at = @At("TAIL"))
     private void setModelPoseInject(AbstractClientPlayer clientPlayer, CallbackInfo ci, @Local PlayerModel<AbstractClientPlayer> playermodel) {
-
-        if(!ModConfigs.hide_rider)
-            return;
 
         Entity vehicle = clientPlayer.getVehicle();
         LocalPlayer localPlayer = Minecraft.getInstance().player;
 
-        if(vehicle instanceof LocalPlayer localPlayer1 && localPlayer == localPlayer1) {
+        if (vehicle instanceof LocalPlayer localPlayer1 && localPlayer == localPlayer1) {
 
             // The player is in first-person mode
             if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-                playermodel.leftLeg.visible = false;
-                playermodel.rightLeg.visible = false;
-                playermodel.leftPants.visible = false;
-                playermodel.rightPants.visible = false;
+
+                if (ModConfigs.effect_translucent_carrier == 0 || ModConfigs.effect_translucent == 0) {
+                    playermodel.head.visible = false;
+                    playermodel.hat.visible = false;
+                    playermodel.body.visible = false;
+                    playermodel.jacket.visible = false;
+                    playermodel.leftLeg.visible = false;
+                    playermodel.rightLeg.visible = false;
+                    playermodel.leftPants.visible = false;
+                    playermodel.rightPants.visible = false;
+                    playermodel.leftArm.visible = false;
+                    playermodel.rightArm.visible = false;
+                    playermodel.leftSleeve.visible = false;
+                    playermodel.rightSleeve.visible = false;
+                }
             }
         }
     }
