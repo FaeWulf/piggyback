@@ -25,15 +25,17 @@ public abstract class ServerPlayerMixin extends Player {
         super(world, pos, yaw, gameProfile);
     }
 
+    // Apply effects
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickInjectApplySlow(CallbackInfo ci) {
-
-        if(!ModConfigs.slow_carry)
-            return;
-
-        if(!this.getPassengers().isEmpty())  {
+        if (!this.getPassengers().isEmpty() && ModConfigs.slow_carry) {
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 3, 0, false, false));
         }
+
+        if (!this.getPassengers().isEmpty() && ModConfigs.hunger_carry) {
+            this.causeFoodExhaustion(0.005F);
+        }
+    }
     }
 
     // For realistic piggyback mechanic
