@@ -29,6 +29,9 @@ public abstract class EntityMixin  implements Nameable, EntityAccess, CommandSou
     @Shadow @Nullable
     public abstract Entity getVehicle();
 
+    @Shadow
+    public abstract void stopRiding();
+
     @Inject(method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V", at = @At("TAIL"))
     private void updatePassengerPositionInject(Entity passenger, Entity.MoveFunction positionUpdater, CallbackInfo ci) {
         if (passenger instanceof Player && this.hasPassenger(passenger) && ((Entity) (Object) this) instanceof Player player) {
@@ -70,7 +73,7 @@ public abstract class EntityMixin  implements Nameable, EntityAccess, CommandSou
 
         Entity vehicle = this.getVehicle();
         if (vehicle instanceof Player) {
-            ((ServerPlayer)(Object)this).stopRiding();
+            this.stopRiding();
         }
     }
 }
