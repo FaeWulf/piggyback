@@ -37,7 +37,7 @@ public abstract class EntityMixin implements Nameable, EntityAccess, CommandSour
 
     @Inject(method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V", at = @At("TAIL"))
     private void updatePassengerPositionInject(Entity passenger, Entity.MoveFunction positionUpdater, CallbackInfo ci) {
-        if (this.hasPassenger(passenger) && ((Entity) (Object) this) instanceof Player player) {
+        if (passenger instanceof Player && this.hasPassenger(passenger) && ((Entity) (Object) this) instanceof Player player) {
             float h = 0.6F;
             float f = Mth.sin(player.yBodyRot * 0.017453292F);
             float g = Mth.cos(player.yBodyRot * 0.017453292F);
