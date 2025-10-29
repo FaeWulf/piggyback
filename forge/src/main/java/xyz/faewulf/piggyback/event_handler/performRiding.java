@@ -10,10 +10,10 @@ import xyz.faewulf.piggyback.Constants;
 public class performRiding {
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        InteractionResult interactionResult = xyz.faewulf.piggyback.event.performRiding.run(event.getLevel(), event.getEntity(), event.getHand(), event.getTarget(), null);
-
-        if (interactionResult.consumesAction()) {
-            event.setCancellationResult(InteractionResult.CONSUME);
-        }
+//        InteractionResult interactionResult = xyz.faewulf.piggyback.event.performRiding.run(event.getLevel(), event.getEntity(), event.getHand(), event.getTarget(), null);
+//
+//        if (interactionResult.consumesAction()) {
+//            event.setCancellationResult(InteractionResult.CONSUME);
+//        }
     }
 }
