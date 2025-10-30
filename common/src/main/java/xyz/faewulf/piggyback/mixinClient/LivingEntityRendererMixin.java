@@ -7,23 +7,25 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.faewulf.piggyback.inter.ICustomPlayerRenderState;
 import xyz.faewulf.piggyback.util.config.ModConfigs;
 
@@ -36,8 +38,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     @Shadow
     public abstract @NotNull M getModel();
 
-    @ModifyVariable(method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("STORE"), ordinal = 2)
-    private int injected(int original, @Local(argsOnly = true) S renderState) {
+    @ModifyVariable(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At("STORE"), ordinal = 1)
+    private int injectedCustomAlphaValue(int original, @Local(argsOnly = true) S renderState) {
 
         if (renderState instanceof ICustomPlayerRenderState iCustomPlayerRenderState) {
 
@@ -61,10 +63,10 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     }
 
     @WrapOperation(
-            method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V")
+            method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/RenderType;IIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V")
     )
-    private void cancelRenderIfValueIsZero(EntityModel instance, PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int i, int k, Operation<Void> original, @Local(argsOnly = true) S renderState) {
+    private void cancelRenderIfValueIsZero(SubmitNodeCollector instance, Model model, Object o, PoseStack poseStack, RenderType renderType, int i, int i1, int i2, TextureAtlasSprite textureAtlasSprite, int i3, ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, Operation<Void> original, @Local(argsOnly = true) S renderState) {
 
         if (renderState instanceof ICustomPlayerRenderState iCustomPlayerRenderState) {
 
@@ -80,28 +82,6 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
         }
 
-        original.call(instance, poseStack, vertexConsumer, packedLight, i, k);
-    }
-
-    @Inject(method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"))
-    private void setRenderModel(S renderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
-        M model = this.getModel();
-
-        if (model instanceof PlayerModel playerModel && renderState instanceof PlayerRenderState playerRenderState) {
-
-            //Entity vehicle = clientPlayer.getVehicle();
-            LocalPlayer localPlayer = Minecraft.getInstance().player;
-
-//            if (vehicle instanceof LocalPlayer localPlayer1 && localPlayer == localPlayer1) {
-//
-//                // The player is in first-person mode
-//                if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-//                    playerModel.leftLeg.visible = false;
-//                    playerModel.rightLeg.visible = false;
-//                    playerModel.leftPants.visible = false;
-//                    playerModel.rightPants.visible = false;
-//                }
-//            }
-        }
+        original.call(instance, model, o, poseStack, renderType, i, i1, i2, textureAtlasSprite, i3, crumblingOverlay);
     }
 }

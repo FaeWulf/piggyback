@@ -71,7 +71,7 @@ public abstract class ServerPlayerMixin extends Player {
 
     // Send sync packet to prevent client desync from riding multiple players.
     @Inject(method = "startRiding", at = @At("RETURN"))
-    private void startRidingInjectSyncPacket(Entity entity, boolean force, CallbackInfoReturnable<Boolean> cir) {
+    private void startRidingInjectSyncPacket(Entity entity, boolean force, boolean sendGameEvent, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof ServerPlayer playerEntity && cir.getReturnValue()) {
             playerEntity.connection.send(new ClientboundSetPassengersPacket(playerEntity));
         }

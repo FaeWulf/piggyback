@@ -65,7 +65,7 @@ public abstract class EntityMixin implements Nameable, EntityAccess, CommandSour
     private void onRemovePassenger(Entity passenger, CallbackInfo callbackInfo) {
         Entity entity = (Entity) (Object) this;
 
-        if (!this.level.isClientSide && entity instanceof ServerPlayer serverPlayer)
+        if (!this.level.isClientSide() && entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.send(new ClientboundSetPassengersPacket(entity));
     }
 
@@ -73,7 +73,7 @@ public abstract class EntityMixin implements Nameable, EntityAccess, CommandSour
     @Inject(method = "unRide", at = @At("HEAD"))
     private void onUnRide(CallbackInfo ci) {
 
-        if (this.level.isClientSide)
+        if (this.level.isClientSide())
             return;
 
         Entity vehicle = this.getVehicle();
@@ -84,7 +84,7 @@ public abstract class EntityMixin implements Nameable, EntityAccess, CommandSour
 
     // Make player ridable
     @WrapOperation(
-            method = "startRiding(Lnet/minecraft/world/entity/Entity;Z)Z",
+            method = "startRiding(Lnet/minecraft/world/entity/Entity;ZZ)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
     private boolean startRidingAllowRidingPlayersInject(EntityType instance, Operation<Boolean> original) {

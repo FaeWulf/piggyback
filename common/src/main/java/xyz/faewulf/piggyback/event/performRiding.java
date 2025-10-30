@@ -24,8 +24,8 @@ public class performRiding {
                 && player.getItemInHand(hand).isEmpty()
                 && hitResult == null
         ) {
-            if (!level.isClientSide) {
-                player.startRiding(entity, true);
+            if (!level.isClientSide()) {
+                player.startRiding(entity, true, true);
                 return InteractionResult.SUCCESS;
             }
         }

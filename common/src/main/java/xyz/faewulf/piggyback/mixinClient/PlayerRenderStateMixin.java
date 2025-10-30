@@ -1,12 +1,12 @@
 package xyz.faewulf.piggyback.mixinClient;
 
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import xyz.faewulf.piggyback.inter.ICustomPlayerRenderState;
 
-@Mixin(PlayerRenderState.class)
+@Mixin(AvatarRenderState.class)
 public abstract class PlayerRenderStateMixin extends HumanoidRenderState implements ICustomPlayerRenderState {
 
     @Unique
