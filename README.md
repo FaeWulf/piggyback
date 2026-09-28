@@ -31,7 +31,7 @@
 
 ## 📑 Overview
 
-**Piggyback Rides** is a fun and small mod that changes Minecraft's default sitting mechanic into a more natural piggyback-style ride. Instead of sitting on another player’s head, you now ride on their back—perfect for co-op adventures, silly roleplays, or chaotic situations!.
+**Piggyback Rides** is a fun and small mod that changes Minecraft's default sitting mechanic into a more natural piggyback-style ride. Instead of sitting on another player’s head, you now ride on their back, perfect for co-op adventures, silly roleplays, or chaotic situations!.
 
 ## 📦 Features
 

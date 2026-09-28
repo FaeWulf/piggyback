@@ -5,10 +5,4 @@ Or alternatively, visit [mod's github](https://github.com/FaeWulf/piggyback/blob
 
 ### Added
 
-- Ported to 1.21.10
-
-### Fixed
-
-- Compatibility with `Doggy Talents Next`
-- Compatibility with `Carry on`
-- Compatibility with `Let Your Friend Eating`
+- Ported to 1.21.11

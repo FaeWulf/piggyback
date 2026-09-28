@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,7 +33,7 @@ public abstract class PlayerMixin extends LivingEntity {
 //    }
 
     @Inject(method = "interactOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", ordinal = 0), cancellable = true)
-    private void Piggyback$interactOnInject(Entity entityToInteractOn, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void Piggyback$interactOnInject(Entity entityToInteractOn, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
         if((Object) this instanceof Player player) {
             performRiding.run(this.level(), player, hand, entityToInteractOn, null);
         }

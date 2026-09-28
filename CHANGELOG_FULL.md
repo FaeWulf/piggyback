@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.1] - 2025-10-30
+
+### Added
+
+- Ported to 1.21.10
+
+### Fixed
+
+- Compatibility with `Doggy Talents Next`
+- Compatibility with `Carry on`
+- Compatibility with `Let Your Friend Eating`
+
 ## [1.1.0] - 2025-6-23
 
 ### Added

@@ -1,10 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "xyz.faewulf.piggyback.mixin",
+  "package": "com.example.examplemod.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [],
-  "client": [],
+  "client": [
+    "MixinTitleScreen"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
