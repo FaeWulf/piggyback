@@ -5,4 +5,4 @@ Or alternatively, visit [mod's github](https://github.com/FaeWulf/piggyback/blob
 
 ### Added
 
-- Ported to 26.1.2
+- Ported to 26.2

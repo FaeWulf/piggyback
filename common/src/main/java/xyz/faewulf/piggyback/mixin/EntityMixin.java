@@ -10,6 +10,7 @@ import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityAccess;
@@ -88,7 +89,7 @@ public abstract class EntityMixin implements Nameable, EntityAccess, CommandSour
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;canSerialize()Z")
     )
     private boolean startRidingAllowRidingPlayersInject(EntityType instance, Operation<Boolean> original) {
-        if (instance == EntityType.PLAYER) {
+        if (instance == EntityTypes.PLAYER) {
             return true;
         } else {
             return original.call(instance);

@@ -3,7 +3,7 @@ package xyz.faewulf.piggyback.event;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
@@ -18,7 +18,7 @@ public class performRiding {
             return InteractionResult.PASS;
 
         //if not mainhand
-        if ((entity.getType() == EntityType.PLAYER)
+        if ((entity.getType() == EntityTypes.PLAYER)
                 && hand == InteractionHand.MAIN_HAND
                 && entity.isCrouching()
                 && player.getItemInHand(hand).isEmpty()
